@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Gito/Scenes/Title.unity
+    guid: 7588f676ae6d845f6a4de4e22f99fbd6
+  - enabled: 1
     path: Assets/Gito/Scenes/Main.unity
     guid: 0645d4773de114d629f2e7e10df56b99
   m_configObjects: {}

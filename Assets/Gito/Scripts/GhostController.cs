@@ -66,6 +66,7 @@ public class GhostController : MonoBehaviour, IUpdate
             audioSource.PlayOneShot (death);
             audioSource.volume = 1f;
             player.GetComponent<PlayerController> ().AbsorbGhost (gameObject);
+            tag = "Untagged";
             GameManager.ScoreCount (point);
             UpdateManager.RemoveUpdateList (this);
             GetComponent<GhostController>().enabled = false;

@@ -80,6 +80,8 @@ public class PlayerController : MonoBehaviour, IUpdate
         MouseLook ();
 
         animator.SetFloat ("Speed", (controller.velocity.magnitude / speed) * (state == State.NORMAL ? 1f : 0f));
+
+        Debug.Log (state);
     }
 
     float foot = 0;
@@ -134,6 +136,7 @@ public class PlayerController : MonoBehaviour, IUpdate
                 vacuumAudio.volume = 0.5f;
                 vacuumAudio.DOFade (0f, 1f);
                 effect1.Play ();
+                StartCoroutine (VacuumReticle ());
                 ChangeState (State.NORMAL, 1f);
                 vacuum.DOPunchPosition (Vector3.back * 0.2f, 0.3f, 1);
             }
@@ -144,6 +147,7 @@ public class PlayerController : MonoBehaviour, IUpdate
                 vacuumAudio.volume = 0f;
                 vacuumAudio.DOFade (0.5f, 0.5f);
                 ChangeState (State.VACUUMING, 0);
+                StartCoroutine (VacuumingReticle ());
                 effect2.Play ();
             }
         }
@@ -190,6 +194,39 @@ public class PlayerController : MonoBehaviour, IUpdate
                 }
             }
         }
+    }
+
+    private IEnumerator VacuumingReticle ()
+    {
+        RectTransform reticle = GameObject.Find ("UIs/Game/Reticle").GetComponent<RectTransform> ();
+        reticle.DOSizeDelta (Vector2.one * 250f, 0.4f);
+        yield return new WaitForSeconds (0.4f);
+        float t = 0.2f;
+        bool b = true;
+        while(state == State.VACUUMING)
+        {
+            t += Time.deltaTime;
+
+            if (t > (b ? 0.2f : 0.4f))
+            {
+                t = 0;
+                b = !b;
+                reticle.DOSizeDelta (Vector2.one * (b ? 250f : 200f), b ? 0.2f : 0.4f);
+            }
+            yield return null;
+        }
+        reticle.DOKill ();
+        reticle.DOSizeDelta (Vector2.one * 10f, 0.5f);
+        yield break;
+    }
+
+    private IEnumerator VacuumReticle ()
+    {
+        RectTransform reticle = GameObject.Find ("UIs/Game/Reticle").GetComponent<RectTransform> ();
+        reticle.DOSizeDelta (Vector2.one * 30f, 0.3f);
+        yield return new WaitForSeconds (0.3f);
+        reticle.DOSizeDelta (Vector2.one * 10f, 0.7f);
+        yield break;
     }
 
     private void StopVacuum ()

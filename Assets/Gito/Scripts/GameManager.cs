@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
 
+// 進行度
 public enum Progress
 {
     TITLE,
@@ -12,17 +13,19 @@ public enum Progress
     FINISH
 }
 
+// ゲームの進行管理
 public class GameManager : UIManager, IUpdate
 {
+    // 進行度
     public static Progress progress = Progress.READY;
-
+    // スコア
     private static int score;
-
+    // テキスト
     [SerializeField] private Text timerText, scoreText;
-
+    // 時間用の変数
     private int h = 23, m = 45;
     private float t = 0;
-
+    // ベルとアラーム
     [SerializeField] private AudioClip bell, alerm;
 
     private static float sensi = 50f;
@@ -51,6 +54,7 @@ public class GameManager : UIManager, IUpdate
         Pause ();
     }
 
+    // 時間経過
     private void TimeCount ()
     {
         t += Time.deltaTime;
@@ -81,12 +85,14 @@ public class GameManager : UIManager, IUpdate
         }
     }
 
+    // テキストを更新する
     private void UpdateText ()
     {
         timerText.text = string.Format ("{0:d} : {1:d2}", h, m);
         scoreText.text = "Score : " + score;
     }
 
+    // ゲームスタート
     private void GameStart ()
     {
         progress = Progress.PLAYING;
@@ -96,6 +102,7 @@ public class GameManager : UIManager, IUpdate
         GetComponent<GhostSpawner> ().FirstSpawn ();
     }
 
+    // ゲーム終了
     private void FinishGame ()
     {
         progress = Progress.FINISH;
@@ -103,6 +110,7 @@ public class GameManager : UIManager, IUpdate
         StartCoroutine (FinishCor ());
     }
 
+    // ゲーム終了時のフロー
     private IEnumerator FinishCor ()
     {
         BlackFadeOut (1f);
@@ -122,11 +130,13 @@ public class GameManager : UIManager, IUpdate
         result.transform.Find ("GoTitle").gameObject.SetActive (true);
     }
 
+    // スコアをアップ
     public static void ScoreCount (int up)
     {
         score += up;
     }
 
+    // 一時停止
     Progress pprogress;
     private void Pause ()
     {
@@ -143,6 +153,7 @@ public class GameManager : UIManager, IUpdate
         }
     }
 
+    // 一時停止する
     private void PauseOpen ()
     {
         pprogress = progress;
@@ -155,18 +166,21 @@ public class GameManager : UIManager, IUpdate
         pause.SetActive (true);
     }
 
+    // 一時停止を閉じる
     public void PauseClose ()
     {
         progress = pprogress;
         Time.timeScale = 1;
         CursorEnable (false);
         GameObject pause = GameObject.Find ("UIs").transform.Find ("Pause").gameObject;
+        // 視点移動の感度を設定
         Slider slider = pause.transform.Find ("Sensi/Slider").GetComponent<Slider> ();
         sensi = slider.value;
         GameObject.FindWithTag ("Player").GetComponent<PlayerController> ().mouse_sense = sensi;
         pause.SetActive (false);
     }
 
+    // タイトルへ
     public void GoTitle ()
     {
         LoadScene ("Title");

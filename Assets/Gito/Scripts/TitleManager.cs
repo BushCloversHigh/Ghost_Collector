@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using System.Collections;
-
+// タイトル画面を管理
 public class TitleManager : UIManager
 {
     private Transform cam;
@@ -21,6 +21,7 @@ public class TitleManager : UIManager
         StartCoroutine (CameraMove ());
     }
 
+    // カメラをアニメーションさせる
     private IEnumerator CameraMove ()
     {
         int i = 0;
@@ -40,6 +41,7 @@ public class TitleManager : UIManager
         }
     }
 
+    // スタートボタンを押した
     public void StartPushed ()
     {
         PlaySoundEffect (piano2);
@@ -48,6 +50,7 @@ public class TitleManager : UIManager
         LoadScene ("Main", 1f);
     }
 
+    // ランキングボタンを押した
     public void RankingPushed ()
     {
         PlaySoundEffect (piano1);
@@ -57,6 +60,7 @@ public class TitleManager : UIManager
 
     }
 
+    // ランキングを閉じた
     public void RankingBack ()
     {
         PlaySoundEffect (piano1);

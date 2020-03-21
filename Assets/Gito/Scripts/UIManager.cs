@@ -4,8 +4,10 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+// UIの共通部分
 public class UIManager : MonoBehaviour
 {
+    // カーソルの表示非表示
     public void CursorEnable (bool enable)
     {
         if (enable)
@@ -20,6 +22,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // フェードイン
     public void BlackFadeIn (float dulation)
     {
         GameObject black = GameObject.Find ("UIs").transform.Find ("Black").gameObject;
@@ -32,6 +35,7 @@ public class UIManager : MonoBehaviour
         DelayActive (black, false, dulation);
     }
 
+    // フェードアウト
     public void BlackFadeOut (float dulation)
     {
         GameObject black = GameObject.Find ("UIs").transform.Find ("Black").gameObject;
@@ -43,16 +47,19 @@ public class UIManager : MonoBehaviour
         img.DOFade (1f, dulation);
     }
 
+    // テキストのフェード
     public void Fade (Text text, float alpha, float dulation)
     {
         text.DOFade (alpha, dulation);
     }
 
+    // 画像のフェード
     public void Fade (Image img, float alpha, float dulation)
     {
         img.DOFade (alpha, dulation);
     }
 
+    // 遅らせてからのアクティブ非アクティブ
     public void DelayActive (GameObject obj, bool active, float delay)
     {
         StartCoroutine (DelayActiveCor (obj, active, delay));
@@ -64,21 +71,25 @@ public class UIManager : MonoBehaviour
         obj.SetActive (active);
     }
 
+    // 効果音を鳴らす
     public void PlaySoundEffect (AudioClip se)
     {
         transform.GetChild (1).GetComponent<AudioSource> ().PlayOneShot (se);
     }
 
+    // BGMを止める
     public void BGMStop ()
     {
         transform.GetChild (0).GetComponent<AudioSource> ().Stop();
     }
 
+    // BGMのフェード
     public void BGMVolumeFade(float to, float dulation)
     {
         transform.GetChild (0).GetComponent<AudioSource> ().DOFade(to, dulation);
     }
 
+    // シーンを変更
     public void LoadScene (string sceneName, float delay = 0)
     {
         StartCoroutine (LoadSceneCor (sceneName, delay));
@@ -90,6 +101,7 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene (sceneName);
     }
 
+    // トーストを表示　メッセージ
     private float fadeSpeed = 0.3f;
     private bool isShowing = false;
     private IEnumerator cor;
@@ -113,6 +125,7 @@ public class UIManager : MonoBehaviour
         StartCoroutine (cor);
     }
 
+    // トーストを閉じる
     private IEnumerator Close ()
     {
         yield return new WaitForSeconds (3f);

@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
+// ゴーストのコントローラー
 public class GhostController : MonoBehaviour, IUpdate
 {
-
+    // 状態
     public enum State
     {
         NORMAL,
@@ -13,21 +14,30 @@ public class GhostController : MonoBehaviour, IUpdate
     }
 
     private State state = State.NORMAL;
+    // エージェント
     private NavMeshAgent agent;
+    // アニメーター
     private Animator animator;
+    // 吸い込まれ時の効果音
     [SerializeField] private AudioClip death;
-
+    // 攻撃のオブジェクト
     [SerializeField] private GameObject ghostAttack;
     [SerializeField] private Transform ballSpawn;
-
+    // 動けるか
     [SerializeField] private bool moveAble = true;
-
+    // 通常時の速度
     [SerializeField] private float normalSpeed = 1f;
+    // 逃げるときの速度
     [SerializeField] private float escapeSpeed = 2f;
+    // スタミナ
     public int stamina = 10;
+    // 視野の距離
     [SerializeField] private float sight = 3f;
+    // 攻撃できるか
     [SerializeField] private bool attack = false;
+    // ワープできるか
     [SerializeField] private bool warpAble = false;
+    // このゴーストを吸い込んだときの獲得ポイントは
     [SerializeField] private int point = 10;
     public float vacuum = 0;
 
@@ -47,19 +57,23 @@ public class GhostController : MonoBehaviour, IUpdate
 
     public void UpdateMe ()
     {
+        // ゲームが終了してたら、音量0
         if(GameManager.progress == Progress.FINISH)
         {
             GetComponent<AudioSource> ().volume = 0;
             return;
         }
 
+        // 死んでたら何もできない
         if (state == State.DEATH)
         {
             return;
         }
 
+        // スタミナがもうない　死ぬ
         if (stamina <= 0)
         {
+            // 吸い込まれる〜
             state = State.DEATH;
             AudioSource audioSource = GetComponent<AudioSource> ();
             audioSource.Stop ();
@@ -73,9 +87,10 @@ public class GhostController : MonoBehaviour, IUpdate
             return;
         }
 
+        // 動けないなら、ここから何もできない
         if (!moveAble) return;
 
-
+        // ワープできる個体なら、ワープする
         if (warpAble)
         {
             RandomWarp ();
@@ -83,15 +98,15 @@ public class GhostController : MonoBehaviour, IUpdate
 
         switch (state)
         {
-        case State.NORMAL:
+        case State.NORMAL: // 通常時　普通のスピード　巡回　プレイヤーを見つける
             agent.speed = normalSpeed;
             RandomPatrol ();
             FindPlayer ();
             break;
-        case State.FOUND:
+        case State.FOUND: // プレイヤーを見つけている
             agent.speed = 0f;
             break;
-        case State.ESCAPE:
+        case State.ESCAPE: // 逃げる
             agent.speed = escapeSpeed;
             Escaping ();
             break;
@@ -99,15 +114,18 @@ public class GhostController : MonoBehaviour, IUpdate
         animator.SetFloat ("Speed", agent.velocity.magnitude);
     }
 
+    // ランダムなポジションにワープ
     public void WarpRandomPos ()
     {
         if (agent == null)
         {
             agent = GetComponent<NavMeshAgent> ();
         }
+        // ワープできるところがだったらワープ
         while (!agent.Warp (RandomPos ())) { }
     }
 
+    // ワープするやつは3秒おきにワープ
     private float warpTime = 0f;
     private void RandomWarp ()
     {
@@ -123,9 +141,11 @@ public class GhostController : MonoBehaviour, IUpdate
         }
     }
 
+    // 巡回
     private float rpt = 0f, next_rpt = 0f;
     private void RandomPatrol ()
     {
+        // ランダムなところをパトロール
         rpt += Time.deltaTime;
         if (rpt > next_rpt)
         {
@@ -135,6 +155,7 @@ public class GhostController : MonoBehaviour, IUpdate
         }
     }
 
+    // プレイヤーを見つける
     private float angle = 0;
     private bool angleDir = true;
     private void FindPlayer ()
@@ -159,14 +180,17 @@ public class GhostController : MonoBehaviour, IUpdate
         }
     }
 
+    // プレイヤーを見つけた
     private void FoundPlayer ()
     {
+        // 攻撃かびっくりする
         animator.SetTrigger (attack ? "Attack" : "Surprise");
         state = State.FOUND;
 
         transform.LookAt (player.transform.position);
     }
 
+    // 逃げる
     private void Escape ()
     {
         state = State.ESCAPE;
@@ -178,6 +202,7 @@ public class GhostController : MonoBehaviour, IUpdate
         Escape ();
     }
 
+    // 逃げている最中
     private float cantSeeDuration = 0;
     private void Escaping ()
     {

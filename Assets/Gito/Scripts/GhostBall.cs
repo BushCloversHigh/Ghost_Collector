@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// ゴーストの攻撃
 public class GhostBall : MonoBehaviour, IUpdate
 {
 
@@ -11,6 +12,7 @@ public class GhostBall : MonoBehaviour, IUpdate
     }
 
     private float t = 0;
+    // 前に進む　5秒経ったら消える
     public void UpdateMe ()
     {
         transform.position += transform.forward * 1.5f * Time.deltaTime;
@@ -22,6 +24,7 @@ public class GhostBall : MonoBehaviour, IUpdate
         }
     }
 
+    // プレイヤーにぶつかったら、ダメージを与える
     public void OnCollisionEnter (Collision collision)
     {
         if (collision.gameObject.CompareTag ("Player"))

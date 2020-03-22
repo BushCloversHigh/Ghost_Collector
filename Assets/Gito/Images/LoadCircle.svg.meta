@@ -1,22 +1,7 @@
 fileFormatVersion: 2
-guid: 7a1a8f57aaa5d4717a6d7b1e627398c9
+guid: 4c5791dde09574464b365b6a238f28c8
 ScriptedImporter:
-  internalIDToNameTable:
-  - first:
-      1: 100000
-    second: gameObject/RankingButton
-  - first:
-      4: 400000
-    second: gameObject/RankingButton/Transform
-  - first:
-      212: 21200000
-    second: gameObject/RankingButton/SpriteRenderer
-  - first:
-      213: 21300000
-    second: sprite
-  - first:
-      1001: 100100000
-    second: gameObject
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 2
   userData: 
@@ -32,11 +17,11 @@ ScriptedImporter:
   generatePhysicsShape: 0
   viewportOptions: 0
   preserveViewport: 0
-  advancedMode: 0
+  advancedMode: 1
   predefinedResolutionIndex: 2
   targetResolution: 720
   resolutionMultiplier: 1
-  stepDistance: 10
+  stepDistance: 2
   samplingStepDistance: 100
   maxCordDeviationEnabled: 0
   maxCordDeviation: 1
@@ -63,6 +48,6 @@ ScriptedImporter:
         y: 0
         width: 0
         height: 0
-      spriteID: 6fa88b9bcb7f94421880a2e00250981c
+      spriteID: 3a3b6fb200bd2459fb3f3e2944aeca7b
       internalID: 0
     PhysicsOutlines: []
